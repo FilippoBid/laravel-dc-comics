@@ -32,10 +32,34 @@ class ComicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+
+     /* assegno i valori presi dall form nell nuovo elemento */
+    public function store(Request $request){
+        $data = $request->all();
+
+        $comic = new Comic();
+
+        $comic->title = $data["title"];
+
+        $comic->description = $data["description"];
+
+        $comic->thumb = $data["thumb"];
+
+        $comic->price = (float) $data["price"];
+
+        $comic->series = $data["series"];
+
+        $comic->sale_date = $data["sale_date"];
+
+        $comic->type = $data["type"]; 
+
+        $comic->save(); 
+
+
+
+        return redirect()->route("comic.show", $comic->id);
     }
+    
 
     /**
      * Display the specified resource.
