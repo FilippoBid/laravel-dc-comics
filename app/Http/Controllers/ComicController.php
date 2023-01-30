@@ -73,10 +73,10 @@ class ComicController extends Controller
         $comic = Comic::findOrFail($id);
 
         if (!$comic) {
-            // faccio un altra ricerca o lancio un errore.
+            abort(406, "cambia fumetto");
         }
 
-        // dd($product);
+        
         return view("comic.show", [
             "comic" => $comic
         ]);
@@ -90,7 +90,16 @@ class ComicController extends Controller
      */
     public function edit($id)
     {
-        //
+        $comic = Comic::find($id);
+
+        if (!$comic) {
+            // Lancio un messaggio d'errore personalizzato
+            abort(406, "Ritenta, sarai più fortunato");
+        }
+
+        return view("comic.edit", [
+            "comic" => $comic
+        ]);
     }
 
     /**
@@ -102,7 +111,10 @@ class ComicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $comic = Comic::findOrFail($id);
+        $comic->update($data);
+        return redirect()->route("comic.show", $comic->id);
     }
 
     /**
@@ -113,6 +125,12 @@ class ComicController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comic = Comic::findOrFail($id);
+
+        // sull'istanza del model, il metodo da usare è delete()
+        $comic->delete();
+
+        // Un volta eliminato l'elemento dalla tabella, dobbiamo reindirizzare l'utente da qualche parte.
+        return redirect()->route("comic.index");
     }
 }
