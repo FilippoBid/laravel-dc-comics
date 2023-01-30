@@ -13,7 +13,8 @@ class ComicController extends Controller
      */
     public function index()
     {
-        return view("comics.index");
+        $comics = Comic::all();
+        return view("comics.index", ["comics" => $comics]);
     }
 
     /**
@@ -68,8 +69,17 @@ class ComicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        return view("comic.show");
+    {   
+        $comic = Comic::findOrFail($id);
+
+        if (!$comic) {
+            // faccio un altra ricerca o lancio un errore.
+        }
+
+        // dd($product);
+        return view("comic.show", [
+            "comic" => $comic
+        ]);
     }
 
     /**
